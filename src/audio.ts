@@ -1,15 +1,21 @@
-let ctx = null;
-let masterGain = null;
-let ambientOsc = null;
-let ambientGain = null;
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
+
+let ctx: AudioContext | null = null;
+let masterGain: GainNode | null = null;
+let ambientOsc: { osc1: OscillatorNode; osc2: OscillatorNode; noise: AudioBufferSourceNode } | null = null;
+let ambientGain: GainNode | null = null;
 let muted = false;
 let initialized = false;
 
-export function initAudio() {
+export function initAudio(): void {
   if (initialized) return;
   initialized = true;
 
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  ctx = new (window.AudioContext || window.webkitAudioContext!)();
   masterGain = ctx.createGain();
   masterGain.gain.value = 0.3;
   masterGain.connect(ctx.destination);
@@ -56,7 +62,7 @@ export function initAudio() {
   ambientOsc = { osc1, osc2, noise };
 }
 
-export function playHover() {
+export function playHover(): void {
   if (!ctx || muted) return;
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -66,12 +72,12 @@ export function playHover() {
   gain.gain.value = 0.05;
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
   osc.connect(gain);
-  gain.connect(masterGain);
+  gain.connect(masterGain!);
   osc.start();
   osc.stop(ctx.currentTime + 0.15);
 }
 
-export function playClick() {
+export function playClick(): void {
   if (!ctx || muted) return;
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -81,12 +87,12 @@ export function playClick() {
   gain.gain.value = 0.08;
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
   osc.connect(gain);
-  gain.connect(masterGain);
+  gain.connect(masterGain!);
   osc.start();
   osc.stop(ctx.currentTime + 0.25);
 }
 
-export function toggleMute() {
+export function toggleMute(): boolean {
   muted = !muted;
   if (masterGain) {
     masterGain.gain.value = muted ? 0 : 0.3;
@@ -94,6 +100,10 @@ export function toggleMute() {
   return !muted;
 }
 
-export function isMuted() {
+export function isMuted(): boolean {
   return muted;
 }
+
+// Suppress unused variable warning — ambientOsc is retained to prevent GC
+void ambientOsc;
+void ambientGain;

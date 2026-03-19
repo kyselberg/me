@@ -1,6 +1,7 @@
 import * as THREE from 'three';
+import type { SceneSystem } from './types.js';
 
-export function createScene(canvas) {
+export function createScene(canvas: HTMLCanvasElement): SceneSystem {
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,

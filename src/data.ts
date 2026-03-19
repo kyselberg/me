@@ -1,4 +1,6 @@
-export const PROFILE = {
+import type { NodeData, ConnectionTuple, BootLine, ProfileData } from './types.js';
+
+export const PROFILE: ProfileData = {
   name: 'ILLIA KYSELOV',
   title: 'Senior Frontend Engineer',
   tagline: 'I architect scalable frontends for products with millions of users.',
@@ -8,7 +10,7 @@ export const PROFILE = {
   linkedin: 'https://www.linkedin.com/in/illiakyselov',
 };
 
-export const NODES = [
+export const NODES: NodeData[] = [
   {
     id: 'core',
     label: 'CORE',
@@ -154,7 +156,7 @@ export const NODES = [
     size: 1.1,
     content: {
       title: 'Contact',
-      subtitle: 'Let\'s connect',
+      subtitle: "Let's connect",
       lines: [
         '► EMAIL',
         '  doncerber@gmail.com',
@@ -172,7 +174,7 @@ export const NODES = [
   },
 ];
 
-export const CONNECTIONS = [
+export const CONNECTIONS: ConnectionTuple[] = [
   ['core', 'experience'],
   ['core', 'tech'],
   ['core', 'education'],
@@ -187,7 +189,7 @@ export const CONNECTIONS = [
   ['contact', 'experience'],
 ];
 
-export const BOOT_LINES = [
+export const BOOT_LINES: BootLine[] = [
   { time: 0, text: '> BIOS CHECK...', append: ' OK', appendDelay: 300, color: '#00ff88' },
   { time: 400, text: '> GPU INITIALIZED: WebGL 2.0', color: '#00ff88' },
   { time: 700, text: '> LOADING NEURAL_MAP.dat...', color: '#00ff88' },

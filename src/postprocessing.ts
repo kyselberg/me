@@ -4,9 +4,16 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
+import type { PostFxSystem, ChromaticAberrationUniforms, CRTUniforms, FilmGrainUniforms } from './types.js';
+
+interface TypedShader<U extends Record<string, THREE.IUniform<unknown>>> {
+  uniforms: U;
+  vertexShader: string;
+  fragmentShader: string;
+}
 
 // Chromatic Aberration shader
-const ChromaticAberrationShader = {
+const ChromaticAberrationShader: TypedShader<ChromaticAberrationUniforms> = {
   uniforms: {
     tDiffuse: { value: null },
     uOffset: { value: 0.003 },
@@ -38,7 +45,7 @@ const ChromaticAberrationShader = {
 };
 
 // CRT + Scanline shader
-const CRTShader = {
+const CRTShader: TypedShader<CRTUniforms> = {
   uniforms: {
     tDiffuse: { value: null },
     uTime: { value: 0 },
@@ -90,7 +97,7 @@ const CRTShader = {
 };
 
 // Film Grain + Flicker
-const FilmGrainShader = {
+const FilmGrainShader: TypedShader<FilmGrainUniforms> = {
   uniforms: {
     tDiffuse: { value: null },
     uTime: { value: 0 },
@@ -129,7 +136,11 @@ const FilmGrainShader = {
   `,
 };
 
-export function createPostProcessing(renderer, scene, camera) {
+export function createPostProcessing(
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.PerspectiveCamera
+): PostFxSystem {
   const composer = new EffectComposer(renderer);
 
   // Base render
@@ -146,30 +157,33 @@ export function createPostProcessing(renderer, scene, camera) {
   composer.addPass(bloomPass);
 
   // Chromatic aberration
-  const chromaticPass = new ShaderPass(ChromaticAberrationShader);
+  const chromaticPass = new ShaderPass(ChromaticAberrationShader as unknown as THREE.ShaderMaterial);
   composer.addPass(chromaticPass);
+  const chromaticUniforms = chromaticPass.uniforms as unknown as ChromaticAberrationUniforms;
 
   // CRT scanlines
-  const crtPass = new ShaderPass(CRTShader);
+  const crtPass = new ShaderPass(CRTShader as unknown as THREE.ShaderMaterial);
   composer.addPass(crtPass);
+  const crtUniforms = crtPass.uniforms as unknown as CRTUniforms;
 
   // Glitch — we control when it fires
   const glitchPass = new GlitchPass();
-  glitchPass.goWild = false;
+  (glitchPass as unknown as { goWild: boolean }).goWild = false;
   glitchPass.enabled = false;
   composer.addPass(glitchPass);
 
   // Film grain
-  const grainPass = new ShaderPass(FilmGrainShader);
+  const grainPass = new ShaderPass(FilmGrainShader as unknown as THREE.ShaderMaterial);
   composer.addPass(grainPass);
+  const grainUniforms = grainPass.uniforms as unknown as FilmGrainUniforms;
 
   // Glitch burst timer
   let glitchTimer = 5 + Math.random() * 5;
 
-  function update(time, delta) {
-    chromaticPass.uniforms.uTime.value = time;
-    crtPass.uniforms.uTime.value = time;
-    grainPass.uniforms.uTime.value = time;
+  function update(time: number, delta: number): void {
+    chromaticUniforms.uTime.value = time;
+    crtUniforms.uTime.value = time;
+    grainUniforms.uTime.value = time;
 
     // Random glitch bursts
     glitchTimer -= delta;
@@ -182,7 +196,7 @@ export function createPostProcessing(renderer, scene, camera) {
     }
   }
 
-  function render() {
+  function render(): void {
     composer.render();
   }
 
@@ -192,5 +206,5 @@ export function createPostProcessing(renderer, scene, camera) {
     bloomPass.resolution.set(window.innerWidth, window.innerHeight);
   });
 
-  return { composer, update, render, bloomPass, chromaticPass };
+  return { composer, update, render };
 }

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { NODES } from './data.js';
+import type { NodesSystem, NodeShaderUniforms, NodeMeshUserData } from './types.js';
 
 // Inline shaders to avoid fetch issues
 const VERT = `
@@ -34,8 +35,10 @@ void main() {
   gl_FragColor = vec4(color, 0.85 + fresnel * 0.15);
 }`;
 
-export function createNodes(scene) {
-  const nodeMeshes = [];
+type NodeShaderMaterial = THREE.ShaderMaterial & { uniforms: NodeShaderUniforms };
+
+export function createNodes(scene: THREE.Scene): NodesSystem {
+  const nodeMeshes: THREE.Mesh[] = [];
   const nodeGroup = new THREE.Group();
 
   // CSS2D renderer for labels
@@ -68,19 +71,16 @@ export function createNodes(scene) {
       },
       transparent: true,
       side: THREE.FrontSide,
-    });
+    }) as NodeShaderMaterial;
 
     const mesh = new THREE.Mesh(sphereGeo, material);
     mesh.scale.setScalar(data.size);
     mesh.position.set(...data.position);
-    mesh.userData = { nodeData: data, hover: 0 };
-    nodeGroup.add(mesh);
 
     // Point light per node
     const light = new THREE.PointLight(color, 2, 15);
     light.position.copy(mesh.position);
     nodeGroup.add(light);
-    mesh.userData.light = light;
 
     // Orbiting ring
     const ringGeo = new THREE.TorusGeometry(data.size * 1.6, 0.02, 8, 64);
@@ -93,7 +93,6 @@ export function createNodes(scene) {
     ring.position.copy(mesh.position);
     ring.rotation.x = Math.PI * 0.35;
     nodeGroup.add(ring);
-    mesh.userData.ring = ring;
 
     // Second ring (perpendicular)
     const ring2Geo = new THREE.TorusGeometry(data.size * 1.9, 0.015, 8, 64);
@@ -107,7 +106,9 @@ export function createNodes(scene) {
     ring2.rotation.x = Math.PI * 0.7;
     ring2.rotation.y = Math.PI * 0.3;
     nodeGroup.add(ring2);
-    mesh.userData.ring2 = ring2;
+
+    const userData: NodeMeshUserData = { nodeData: data, hover: 0, hoverTarget: 0, light, ring, ring2 };
+    mesh.userData = userData;
 
     // CSS2D label
     const labelDiv = document.createElement('div');
@@ -129,29 +130,30 @@ export function createNodes(scene) {
     label.position.set(0, -(data.size + 0.8), 0);
     mesh.add(label);
 
+    nodeGroup.add(mesh);
     nodeMeshes.push(mesh);
   });
 
   scene.add(nodeGroup);
 
-  function update(time) {
+  function update(time: number): void {
     nodeMeshes.forEach((mesh) => {
-      const mat = mesh.material;
+      const mat = mesh.material as NodeShaderMaterial;
       mat.uniforms.uTime.value = time;
 
+      const ud = mesh.userData as NodeMeshUserData;
+
       // Smooth hover interpolation
-      const target = mesh.userData.hoverTarget || 0;
-      mesh.userData.hover += (target - mesh.userData.hover) * 0.1;
-      mat.uniforms.uHover.value = mesh.userData.hover;
+      const target = ud.hoverTarget ?? 0;
+      ud.hover += (target - ud.hover) * 0.1;
+      mat.uniforms.uHover.value = ud.hover;
 
       // Rotate rings
-      const ring = mesh.userData.ring;
-      const ring2 = mesh.userData.ring2;
-      if (ring) ring.rotation.z += 0.003;
-      if (ring2) ring2.rotation.z -= 0.002;
+      if (ud.ring) ud.ring.rotation.z += 0.003;
+      if (ud.ring2) ud.ring2.rotation.z -= 0.002;
 
       // Slight float
-      mesh.position.y = mesh.userData.nodeData.position[1] + Math.sin(time * 0.8 + mesh.id) * 0.15;
+      mesh.position.y = ud.nodeData.position[1] + Math.sin(time * 0.8 + mesh.id) * 0.15;
     });
   }
 

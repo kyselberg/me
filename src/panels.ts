@@ -1,17 +1,19 @@
+import type { NodeContent } from './types.js';
+
 let isOpen = false;
-let typewriterInterval = null;
-let onCloseCallback = null;
+let typewriterInterval: ReturnType<typeof setInterval> | null = null;
+let onCloseCallback: (() => void) | null = null;
 
-const panel = document.getElementById('content-panel');
-const titleEl = document.getElementById('panel-title');
-const subtitleEl = document.getElementById('panel-subtitle');
-const bodyEl = document.getElementById('panel-body');
-const closeBtn = document.getElementById('panel-close');
+const panel = document.getElementById('content-panel') as HTMLElement;
+const titleEl = document.getElementById('panel-title') as HTMLElement;
+const subtitleEl = document.getElementById('panel-subtitle') as HTMLElement;
+const bodyEl = document.getElementById('panel-body') as HTMLElement;
+const closeBtn = document.getElementById('panel-close') as HTMLElement;
 
-export function openPanel(content, onClose) {
+export function openPanel(content: NodeContent, onClose?: () => void): void {
   if (isOpen) return;
   isOpen = true;
-  onCloseCallback = onClose || null;
+  onCloseCallback = onClose ?? null;
 
   titleEl.textContent = content.title;
   subtitleEl.textContent = content.subtitle;
@@ -24,7 +26,7 @@ export function openPanel(content, onClose) {
 
   typewriterInterval = setInterval(() => {
     if (charIndex >= fullText.length) {
-      clearInterval(typewriterInterval);
+      clearInterval(typewriterInterval!);
       typewriterInterval = null;
       return;
     }
@@ -33,7 +35,7 @@ export function openPanel(content, onClose) {
   }, 12);
 }
 
-export function closePanel() {
+export function closePanel(): void {
   if (!isOpen) return;
   isOpen = false;
 
@@ -49,7 +51,7 @@ export function closePanel() {
   }
 }
 
-export function isPanelOpen() {
+export function isPanelOpen(): boolean {
   return isOpen;
 }
 
@@ -57,7 +59,7 @@ export function isPanelOpen() {
 closeBtn.addEventListener('click', closePanel);
 
 // Close on ESC
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Escape' && isOpen) {
     closePanel();
   }

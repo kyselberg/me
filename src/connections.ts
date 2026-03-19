@@ -1,18 +1,27 @@
 import * as THREE from 'three';
 import { CONNECTIONS, NODES } from './data.js';
+import type { ConnectionsSystem } from './types.js';
 
 const PARTICLES_PER_CONNECTION = 30;
 
-export function createConnections(scene) {
+interface ParticleSystem {
+  particles: THREE.Points;
+  from: THREE.Vector3;
+  to: THREE.Vector3;
+  offsets: Float32Array;
+  speeds: Float32Array;
+}
+
+export function createConnections(scene: THREE.Scene): ConnectionsSystem {
   const connectionGroup = new THREE.Group();
-  const particleSystems = [];
+  const particleSystems: ParticleSystem[] = [];
 
   // Build position lookup
-  const posMap = {};
+  const posMap: Record<string, THREE.Vector3> = {};
   NODES.forEach((n) => {
     posMap[n.id] = new THREE.Vector3(...n.position);
   });
-  const colorMap = {};
+  const colorMap: Record<string, THREE.Color> = {};
   NODES.forEach((n) => {
     colorMap[n.id] = new THREE.Color(n.color);
   });
@@ -66,20 +75,14 @@ export function createConnections(scene) {
     const particles = new THREE.Points(particleGeo, particleMat);
     connectionGroup.add(particles);
 
-    particleSystems.push({
-      particles,
-      from,
-      to,
-      offsets,
-      speeds,
-    });
+    particleSystems.push({ particles, from, to, offsets, speeds });
   });
 
   scene.add(connectionGroup);
 
-  function update(delta) {
+  function update(delta: number): void {
     particleSystems.forEach((sys) => {
-      const pos = sys.particles.geometry.attributes.position.array;
+      const pos = sys.particles.geometry.attributes['position'].array as Float32Array;
       for (let i = 0; i < PARTICLES_PER_CONNECTION; i++) {
         sys.offsets[i] += sys.speeds[i] * delta;
         if (sys.offsets[i] > 1) sys.offsets[i] -= 1;
@@ -89,7 +92,7 @@ export function createConnections(scene) {
         pos[i * 3 + 1] = sys.from.y + (sys.to.y - sys.from.y) * t;
         pos[i * 3 + 2] = sys.from.z + (sys.to.z - sys.from.z) * t;
       }
-      sys.particles.geometry.attributes.position.needsUpdate = true;
+      sys.particles.geometry.attributes['position'].needsUpdate = true;
     });
   }
 

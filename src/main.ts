@@ -5,13 +5,14 @@ import { createNodes } from './nodes.js';
 import { createConnections } from './connections.js';
 import { createPostProcessing } from './postprocessing.js';
 import { runBootSequence } from './boot.js';
-import { openPanel, closePanel, isPanelOpen } from './panels.js';
-import { showHud, hideHud, discoverNode, updateFps, setAudioState } from './hud.js';
+import { openPanel, closePanel as _closePanel, isPanelOpen } from './panels.js';
+import { showHud, discoverNode, updateFps, setAudioState } from './hud.js';
 import { initAudio, playHover, playClick, toggleMute } from './audio.js';
+import type { NodeMeshUserData } from './types.js';
 
 // ─── State ───
 let running = false;
-let hoveredNode = null;
+let hoveredNode: THREE.Mesh | null = null;
 let audioInitialized = false;
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
@@ -20,7 +21,7 @@ const HOME_POS = new THREE.Vector3(0, 2, 20);
 const HOME_LOOK = new THREE.Vector3(0, 0, 0);
 
 // ─── Init ───
-const canvas = document.getElementById('scene-canvas');
+const canvas = document.getElementById('scene-canvas') as HTMLCanvasElement;
 const { renderer, scene, camera } = createScene(canvas);
 const cameraCtrl = createControls(camera, canvas);
 const nodesSystem = createNodes(scene);
@@ -72,7 +73,7 @@ const rain = new THREE.Points(rainGeo, rainMat);
 scene.add(rain);
 
 // ─── Init audio on first interaction ───
-function ensureAudio() {
+function ensureAudio(): void {
   if (!audioInitialized) {
     audioInitialized = true;
     initAudio();
@@ -80,7 +81,7 @@ function ensureAudio() {
 }
 
 // ─── Boot → Intro → Loop ───
-async function start() {
+async function start(): Promise<void> {
   await runBootSequence();
 
   // Position camera for fly-through
@@ -99,13 +100,13 @@ async function start() {
 }
 
 // ─── Track mouse for hover raycasting ───
-canvas.addEventListener('mousemove', (e) => {
+canvas.addEventListener('mousemove', (e: MouseEvent) => {
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 });
 
 // ─── Raycast for node hover ───
-function updateRaycast() {
+function updateRaycast(): void {
   if (isPanelOpen() || cameraCtrl.isFlying()) return;
 
   raycaster.setFromCamera(mouse, camera);
@@ -113,17 +114,17 @@ function updateRaycast() {
 
   // Reset previous hover
   if (hoveredNode) {
-    hoveredNode.userData.hoverTarget = 0;
+    (hoveredNode.userData as NodeMeshUserData).hoverTarget = 0;
   }
 
   if (intersects.length > 0) {
-    const hit = intersects[0].object;
+    const hit = intersects[0].object as THREE.Mesh;
     if (hit !== hoveredNode) {
       hoveredNode = hit;
       ensureAudio();
       playHover();
     }
-    hit.userData.hoverTarget = 1;
+    (hit.userData as NodeMeshUserData).hoverTarget = 1;
     canvas.style.cursor = 'pointer';
   } else {
     if (hoveredNode) {
@@ -134,7 +135,7 @@ function updateRaycast() {
 }
 
 // ─── Click to inspect node ───
-canvas.addEventListener('click', (e) => {
+canvas.addEventListener('click', (e: MouseEvent) => {
   ensureAudio();
 
   if (isPanelOpen() || cameraCtrl.isFlying()) return;
@@ -149,8 +150,8 @@ canvas.addEventListener('click', (e) => {
 
   if (intersects.length === 0) return;
 
-  const node = intersects[0].object;
-  const data = node.userData.nodeData;
+  const node = intersects[0].object as THREE.Mesh;
+  const data = (node.userData as NodeMeshUserData).nodeData;
 
   playClick();
   discoverNode(data.id);
@@ -174,15 +175,15 @@ canvas.addEventListener('click', (e) => {
 });
 
 // ─── Audio toggle ───
-document.getElementById('hud-audio').addEventListener('click', () => {
+document.getElementById('hud-audio')!.addEventListener('click', () => {
   ensureAudio();
   const on = toggleMute();
   setAudioState(on);
 });
 
 // ─── Update data rain ───
-function updateRain(delta) {
-  const pos = rain.geometry.attributes.position.array;
+function updateRain(delta: number): void {
+  const pos = rain.geometry.attributes['position'].array as Float32Array;
   for (let i = 0; i < rainCount; i++) {
     pos[i * 3 + 1] -= rainSpeeds[i] * delta;
     if (pos[i * 3 + 1] < -15) {
@@ -191,11 +192,11 @@ function updateRain(delta) {
       pos[i * 3 + 2] = (Math.random() - 0.5) * 50;
     }
   }
-  rain.geometry.attributes.position.needsUpdate = true;
+  rain.geometry.attributes['position'].needsUpdate = true;
 }
 
 // ─── Render loop ───
-function animate() {
+function animate(): void {
   if (!running) return;
   requestAnimationFrame(animate);
 
