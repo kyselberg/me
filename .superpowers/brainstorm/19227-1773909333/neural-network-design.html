@@ -1,0 +1,227 @@
+<style>
+  .scene-mockup {
+    background: #0a0a1a;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+    margin: 20px 0;
+  }
+  .scene-mockup::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.03) 0%, transparent 70%);
+  }
+  .node {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 2;
+  }
+  .node:hover {
+    transform: scale(1.15);
+    filter: brightness(1.3);
+  }
+  .node-core {
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.4), rgba(0, 255, 136, 0.1));
+    border: 2px solid #00ff88;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 13px;
+  }
+  .node-exp {
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(0, 204, 255, 0.3), rgba(0, 204, 255, 0.05));
+    border: 2px solid #00ccff;
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
+    color: #00ccff;
+    left: 18%; top: 25%;
+  }
+  .node-tech {
+    width: 85px; height: 85px;
+    background: radial-gradient(circle, rgba(136, 0, 255, 0.3), rgba(136, 0, 255, 0.05));
+    border: 2px solid #8800ff;
+    box-shadow: 0 0 20px rgba(136, 0, 255, 0.3);
+    color: #cc88ff;
+    right: 15%; top: 20%;
+  }
+  .node-edu {
+    width: 65px; height: 65px;
+    background: radial-gradient(circle, rgba(255, 0, 136, 0.3), rgba(255, 0, 136, 0.05));
+    border: 2px solid #ff0088;
+    box-shadow: 0 0 20px rgba(255, 0, 136, 0.3);
+    color: #ff88cc;
+    left: 25%; bottom: 18%;
+  }
+  .node-phil {
+    width: 70px; height: 70px;
+    background: radial-gradient(circle, rgba(255, 170, 0, 0.3), rgba(255, 170, 0, 0.05));
+    border: 2px solid #ffaa00;
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+    color: #ffcc44;
+    right: 20%; bottom: 22%;
+  }
+  .node-contact {
+    width: 55px; height: 55px;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.3), rgba(0, 255, 255, 0.05));
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    color: #00ffff;
+    right: 40%; bottom: 8%;
+  }
+  .connection {
+    position: absolute;
+    height: 2px;
+    z-index: 1;
+    opacity: 0.4;
+  }
+  .hud-overlay {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-family: monospace;
+    font-size: 10px;
+    color: rgba(0, 255, 136, 0.5);
+    line-height: 1.8;
+  }
+  .hud-controls {
+    position: absolute;
+    bottom: 12px; right: 12px;
+    font-family: monospace;
+    font-size: 10px;
+    color: rgba(0, 204, 255, 0.5);
+    text-align: right;
+    line-height: 1.8;
+  }
+  .particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #00ff88;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 4s infinite ease-in-out;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+    50% { transform: translateY(-20px) scale(1.5); opacity: 0.7; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+  .flow-indicator {
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(0, 255, 136, 0.05);
+    border-left: 3px solid #00ff88;
+    font-size: 12px;
+    color: #888;
+  }
+</style>
+
+<h2>Neural Network Hub — Scene Layout</h2>
+<p class="subtitle">This is a 2D mockup of the 3D scene. In reality, all nodes float in 3D space with depth, rotation, and parallax.</p>
+
+<div class="scene-mockup">
+  <!-- Fake particles -->
+  <div class="particles">
+    <div class="particle" style="left: 10%; top: 30%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 45%; top: 15%; animation-delay: 0.5s;"></div>
+    <div class="particle" style="left: 70%; top: 60%; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 30%; top: 70%; animation-delay: 1.5s;"></div>
+    <div class="particle" style="left: 80%; top: 40%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 55%; top: 85%; animation-delay: 2.5s;"></div>
+    <div class="particle" style="left: 15%; top: 55%; animation-delay: 0.8s;"></div>
+    <div class="particle" style="left: 90%; top: 20%; animation-delay: 1.2s;"></div>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud-overlay">
+    > SYS.INIT<br>
+    > NEURAL_MAP.LOADED<br>
+    > NODES: 6 | LINKS: 12<br>
+    > FPS: 60 | GPU: ACTIVE<br>
+    > <span style="animation: pulse 2s infinite;">▮</span>
+  </div>
+
+  <div class="hud-controls">
+    [WASD] MOVE<br>
+    [MOUSE] LOOK<br>
+    [CLICK] INSPECT NODE<br>
+    [ESC] OVERVIEW
+  </div>
+
+  <!-- Nodes -->
+  <div class="node node-core">ILLIA<br>KYSELOV</div>
+  <div class="node node-exp">EXP<br>5+ YRS</div>
+  <div class="node node-tech">TECH<br>ARSENAL</div>
+  <div class="node node-edu">EDU</div>
+  <div class="node node-phil">VALUES</div>
+  <div class="node node-contact">LINK</div>
+</div>
+
+<div class="flow-indicator">
+  <strong>User Flow:</strong> Boot sequence → Camera flies through neural network → Lands at CORE node → User explores freely with WASD/mouse → Click any node → Camera zooms in, node expands into a holographic content panel → ESC returns to overview
+</div>
+
+<h3 style="margin-top: 32px;">Key Visual Effects</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+  <div style="padding: 16px; background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.15); border-radius: 8px;">
+    <h4 style="color: #00ff88; margin: 0 0 8px;">🌟 Bloom + Glow</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">UnrealBloom post-processing. Every node and connection glows with neon halos. Intensity pulses with "heartbeat" animation.</p>
+  </div>
+  <div style="padding: 16px; background: rgba(0, 204, 255, 0.05); border: 1px solid rgba(0, 204, 255, 0.15); border-radius: 8px;">
+    <h4 style="color: #00ccff; margin: 0 0 8px;">⚡ Energy Streams</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Particles flow along connection lines between nodes like electric current. Speed increases when user hovers near a connection.</p>
+  </div>
+  <div style="padding: 16px; background: rgba(136, 0, 255, 0.05); border: 1px solid rgba(136, 0, 255, 0.15); border-radius: 8px;">
+    <h4 style="color: #cc88ff; margin: 0 0 8px;">🎮 Boot Sequence</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Page loads with fake terminal boot: system checks, "NEURAL MAP LOADING...", glitch effects, then camera bursts into the 3D scene.</p>
+  </div>
+  <div style="padding: 16px; background: rgba(255, 0, 136, 0.05); border: 1px solid rgba(255, 0, 136, 0.15); border-radius: 8px;">
+    <h4 style="color: #ff88cc; margin: 0 0 8px;">🔊 Audio Layer</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Ambient synth hum + click/hover sound effects. Subtle, sci-fi, non-intrusive. User can toggle audio on/off.</p>
+  </div>
+</div>
+
+<h3 style="margin-top: 32px;">Color Palette</h3>
+<div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+  <div style="width: 80px; height: 60px; background: #00ff88; border-radius: 8px; display: flex; align-items: end; padding: 4px;">
+    <span style="font-size: 10px; color: #000; font-weight: bold;">#00FF88</span>
+  </div>
+  <div style="width: 80px; height: 60px; background: #00ccff; border-radius: 8px; display: flex; align-items: end; padding: 4px;">
+    <span style="font-size: 10px; color: #000; font-weight: bold;">#00CCFF</span>
+  </div>
+  <div style="width: 80px; height: 60px; background: #8800ff; border-radius: 8px; display: flex; align-items: end; padding: 4px;">
+    <span style="font-size: 10px; color: #fff; font-weight: bold;">#8800FF</span>
+  </div>
+  <div style="width: 80px; height: 60px; background: #ff0088; border-radius: 8px; display: flex; align-items: end; padding: 4px;">
+    <span style="font-size: 10px; color: #000; font-weight: bold;">#FF0088</span>
+  </div>
+  <div style="width: 80px; height: 60px; background: #ffaa00; border-radius: 8px; display: flex; align-items: end; padding: 4px;">
+    <span style="font-size: 10px; color: #000; font-weight: bold;">#FFAA00</span>
+  </div>
+  <div style="width: 80px; height: 60px; background: #0a0a1a; border: 1px solid #333; border-radius: 8px; display: flex; align-items: end; padding: 4px;">
+    <span style="font-size: 10px; color: #888; font-weight: bold;">BG #0A0A1A</span>
+  </div>
+</div>

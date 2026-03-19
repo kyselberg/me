@@ -1,0 +1,327 @@
+<style>
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+  @keyframes scanline {
+    0% { top: -100%; }
+    100% { top: 100%; }
+  }
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.4; }
+    97% { opacity: 0.9; }
+    98% { opacity: 0.3; }
+  }
+  @keyframes chromatic {
+    0%, 100% { text-shadow: -1px 0 #ff0088, 1px 0 #00ccff; }
+    25% { text-shadow: -2px 0 #ff0088, 2px 0 #00ccff; }
+    50% { text-shadow: 1px 0 #ff0088, -1px 0 #00ccff; }
+    75% { text-shadow: 2px -1px #ff0088, -2px 1px #00ccff; }
+  }
+  @keyframes neon-breathe {
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 10px currentColor); }
+    50% { filter: brightness(1.4) drop-shadow(0 0 25px currentColor); }
+  }
+  @keyframes data-stream {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 0% 100%; }
+  }
+
+  .acid-scene {
+    background: #050510;
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    border-radius: 12px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    animation: flicker 8s infinite;
+  }
+
+  /* Scanline overlay */
+  .acid-scene::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 136, 0.02) 2px,
+      rgba(0, 255, 136, 0.02) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Moving scanline beam */
+  .acid-scene::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.15), transparent);
+    animation: scanline 3s linear infinite;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .acid-title {
+    font-family: monospace;
+    font-size: 32px;
+    font-weight: bold;
+    color: #00ff88;
+    text-align: center;
+    animation: chromatic 0.5s infinite, glitch 3s infinite;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8), 0 0 40px rgba(0, 255, 136, 0.4);
+    letter-spacing: 8px;
+    margin-bottom: 4px;
+    position: relative;
+    z-index: 2;
+  }
+  .acid-subtitle {
+    font-family: monospace;
+    font-size: 12px;
+    color: #ff0088;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    animation: neon-breathe 2s infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  .node-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+
+  .acid-node {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s;
+    animation: neon-breathe 3s infinite;
+  }
+  .acid-node:hover {
+    transform: scale(1.2);
+    animation: glitch 0.2s infinite;
+  }
+  .acid-node::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px dashed currentColor;
+    opacity: 0.3;
+    animation: spin 10s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .n-green {
+    color: #00ff88;
+    background: radial-gradient(circle, rgba(0,255,136,0.2) 0%, rgba(0,255,136,0.02) 70%);
+    border: 2px solid #00ff88;
+    box-shadow: 0 0 20px rgba(0,255,136,0.4), inset 0 0 20px rgba(0,255,136,0.1);
+  }
+  .n-blue {
+    color: #00ccff;
+    background: radial-gradient(circle, rgba(0,204,255,0.2) 0%, rgba(0,204,255,0.02) 70%);
+    border: 2px solid #00ccff;
+    box-shadow: 0 0 20px rgba(0,204,255,0.4), inset 0 0 20px rgba(0,204,255,0.1);
+  }
+  .n-purple {
+    color: #cc44ff;
+    background: radial-gradient(circle, rgba(204,68,255,0.2) 0%, rgba(204,68,255,0.02) 70%);
+    border: 2px solid #cc44ff;
+    box-shadow: 0 0 20px rgba(204,68,255,0.4), inset 0 0 20px rgba(204,68,255,0.1);
+  }
+  .n-pink {
+    color: #ff0088;
+    background: radial-gradient(circle, rgba(255,0,136,0.2) 0%, rgba(255,0,136,0.02) 70%);
+    border: 2px solid #ff0088;
+    box-shadow: 0 0 20px rgba(255,0,136,0.4), inset 0 0 20px rgba(255,0,136,0.1);
+  }
+  .n-yellow {
+    color: #ffcc00;
+    background: radial-gradient(circle, rgba(255,204,0,0.2) 0%, rgba(255,204,0,0.02) 70%);
+    border: 2px solid #ffcc00;
+    box-shadow: 0 0 20px rgba(255,204,0,0.4), inset 0 0 20px rgba(255,204,0,0.1);
+  }
+
+  .data-rain {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 20px,
+      rgba(0, 255, 136, 0.03) 20px,
+      rgba(0, 255, 136, 0.03) 21px
+    );
+    animation: data-stream 2s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hud {
+    position: absolute;
+    font-family: monospace;
+    font-size: 9px;
+    color: rgba(0, 255, 136, 0.4);
+    line-height: 1.6;
+    z-index: 2;
+  }
+  .hud-tl { top: 12px; left: 12px; }
+  .hud-tr { top: 12px; right: 12px; text-align: right; color: rgba(255, 0, 136, 0.4); }
+  .hud-bl { bottom: 12px; left: 12px; color: rgba(0, 204, 255, 0.4); }
+  .hud-br { bottom: 12px; right: 12px; text-align: right; }
+
+  .effect-card {
+    padding: 16px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .effect-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 4px);
+    pointer-events: none;
+  }
+</style>
+
+<h2 style="animation: chromatic 1s infinite;">ACID NEURAL NETWORK — v2</h2>
+<p class="subtitle">Pushed harder: glitch, scanlines, chromatic aberration, data rain, aggressive neon</p>
+
+<div class="acid-scene">
+  <div class="data-rain"></div>
+
+  <div class="hud hud-tl">
+    > SYSTEM.BREACH<br>
+    > NEURAL_CORTEX: ONLINE<br>
+    > THREAT_LEVEL: ████████░░ 80%<br>
+    > SCANNING...
+  </div>
+  <div class="hud hud-tr">
+    ILLIA://NEURAL.MAP<br>
+    BUILD: 2024.12.1<br>
+    STATUS: <span style="color: #00ff88;">■</span> ACTIVE
+  </div>
+  <div class="hud hud-bl">
+    [W] FWD [S] BACK<br>
+    [A] LEFT [D] RIGHT<br>
+    [MOUSE] FREELOOK<br>
+    [CLICK] HACK NODE<br>
+    [SHIFT] BOOST
+  </div>
+  <div class="hud hud-br">
+    NODES_DISCOVERED: 0/6<br>
+    CONNECTIONS: 12<br>
+    GPU_CLOCK: 1.82GHz<br>
+    <span style="animation: flicker 0.5s infinite; color: #ff0088;">▶ EXPLORE</span>
+  </div>
+
+  <div class="acid-title">ILLIA KYSELOV</div>
+  <div class="acid-subtitle">// neural interface loaded //</div>
+
+  <div class="node-grid">
+    <div class="acid-node n-green" style="animation-delay: 0s;">
+      <span style="font-size: 18px;">◉</span>
+      CORE<br>
+      <span style="font-size: 8px; opacity: 0.6;">IDENTITY</span>
+    </div>
+    <div class="acid-node n-blue" style="animation-delay: 0.5s;">
+      <span style="font-size: 18px;">⚡</span>
+      EXP<br>
+      <span style="font-size: 8px; opacity: 0.6;">5+ YEARS</span>
+    </div>
+    <div class="acid-node n-purple" style="animation-delay: 1s;">
+      <span style="font-size: 18px;">⬡</span>
+      TECH<br>
+      <span style="font-size: 8px; opacity: 0.6;">ARSENAL</span>
+    </div>
+    <div class="acid-node n-pink" style="animation-delay: 1.5s;">
+      <span style="font-size: 18px;">◈</span>
+      EDU<br>
+      <span style="font-size: 8px; opacity: 0.6;">MASTERS</span>
+    </div>
+    <div class="acid-node n-yellow" style="animation-delay: 2s;">
+      <span style="font-size: 18px;">⟁</span>
+      CODE<br>
+      <span style="font-size: 8px; opacity: 0.6;">PHILOSOPHY</span>
+    </div>
+    <div class="acid-node n-green" style="animation-delay: 2.5s;">
+      <span style="font-size: 18px;">◎</span>
+      LINK<br>
+      <span style="font-size: 8px; opacity: 0.6;">CONTACT</span>
+    </div>
+  </div>
+</div>
+
+<h3 style="margin-top: 32px;">Acid Effects Stack</h3>
+<p class="subtitle">Every effect layered to create a hostile-beautiful digital environment</p>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+  <div class="effect-card" style="background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2);">
+    <h4 style="color: #00ff88; margin: 0 0 8px;">CRT Scanlines</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Horizontal lines overlaid on the entire scene. Moving scanline beam sweeps top-to-bottom. Slight screen curvature distortion via shader.</p>
+  </div>
+  <div class="effect-card" style="background: rgba(255, 0, 136, 0.05); border: 1px solid rgba(255, 0, 136, 0.2);">
+    <h4 style="color: #ff0088; margin: 0 0 8px;">Chromatic Aberration</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">RGB channel separation on all text and nodes. Intensifies during transitions and hover. Red/blue offset shift creates that "broken signal" feel.</p>
+  </div>
+  <div class="effect-card" style="background: rgba(204, 68, 255, 0.05); border: 1px solid rgba(204, 68, 255, 0.2);">
+    <h4 style="color: #cc44ff; margin: 0 0 8px;">Glitch Bursts</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Random screen tears and pixel displacement every 5-10 seconds. Horizontal slice offset, color inversion, noise static. Brief and violent.</p>
+  </div>
+  <div class="effect-card" style="background: rgba(0, 204, 255, 0.05); border: 1px solid rgba(0, 204, 255, 0.2);">
+    <h4 style="color: #00ccff; margin: 0 0 8px;">Data Rain</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Matrix-style falling characters in the background. Green/blue tint, depth-blurred. Characters are actual code snippets and tech keywords from your stack.</p>
+  </div>
+  <div class="effect-card" style="background: rgba(255, 204, 0, 0.05); border: 1px solid rgba(255, 204, 0, 0.2);">
+    <h4 style="color: #ffcc00; margin: 0 0 8px;">Screen Flicker</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Entire scene randomly flickers like a damaged monitor. Brightness drops for 1-2 frames. Combined with a subtle VHS noise texture overlay.</p>
+  </div>
+  <div class="effect-card" style="background: rgba(0, 255, 255, 0.05); border: 1px solid rgba(0, 255, 255, 0.2);">
+    <h4 style="color: #00ffff; margin: 0 0 8px;">Neon Bloom Overdrive</h4>
+    <p style="font-size: 12px; color: #888; margin: 0;">Aggressive UnrealBloom: strength 2.0+, threshold 0.1. Everything glows hard. Node hover amplifies bloom 3x. Light bleeds across the scene. Acid.</p>
+  </div>
+</div>
+
+<h3 style="margin-top: 32px;">Boot Sequence</h3>
+<div style="background: #000; border: 1px solid #00ff88; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 11px; color: #00ff88; line-height: 2;">
+  <span style="color: #555;">[0.00s]</span> > BIOS CHECK... <span style="color: #00ff88;">OK</span><br>
+  <span style="color: #555;">[0.30s]</span> > GPU INITIALIZED: WebGL 2.0<br>
+  <span style="color: #555;">[0.50s]</span> > LOADING NEURAL_MAP.dat... ████████░░░░ 67%<br>
+  <span style="color: #555;">[1.00s]</span> > <span style="color: #ff0088;">WARNING: UNAUTHORIZED ACCESS DETECTED</span><br>
+  <span style="color: #555;">[1.20s]</span> > OVERRIDE: <span style="color: #00ccff;">GRANTED</span><br>
+  <span style="color: #555;">[1.50s]</span> > DECRYPTING PROFILE... <span style="animation: glitch 0.3s infinite;">████████████</span> 100%<br>
+  <span style="color: #555;">[2.00s]</span> > SUBJECT: ILLIA KYSELOV<br>
+  <span style="color: #555;">[2.20s]</span> > CLASS: FRONTEND_ENGINEER<br>
+  <span style="color: #555;">[2.50s]</span> > THREAT_ASSESSMENT: <span style="color: #ffcc00;">EXTREMELY DANGEROUS</span><br>
+  <span style="color: #555;">[3.00s]</span> > <span style="color: #cc44ff; font-size: 14px;">ENTERING NEURAL INTERFACE...</span><br>
+  <span style="color: #555;">[3.50s]</span> > <span style="animation: flicker 0.3s infinite; font-size: 16px;">▶ ▶ ▶</span>
+</div>

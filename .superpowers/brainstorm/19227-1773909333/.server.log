@@ -1,0 +1,8 @@
+{"type":"server-started","port":61838,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:61838","screen_dir":"/Users/illia/workspaces/me/.superpowers/brainstorm/19227-1773909333"}
+{"type":"screen-added","file":"/Users/illia/workspaces/me/.superpowers/brainstorm/19227-1773909333/hub-world-concept.html"}
+{"source":"user-event","type":"click","text":"🧠\n      \n          ◉───◉───◉\n         ╱│╲ ╱│╲ ╱│╲\n        ◉─◉─◉─◉─◉─◉─◉\n         ╲│╱ ╲│╱ ╲│╱\n          ◉───◉───◉\n        ── SYNAPSE MAP ──\n      \n    \n    \n      Neural Network\n      Your skills and experience as an interconnected node graph floating in space. Nodes pulse with energy, connections glow. Click any node to expand its content. Your brain, visualized.\n      \n        Glowing nodes = content sections\n        Pulsing connections between related items\n        Energy flows along paths\n        Organic, breathing animation","choice":"neural-network","id":null,"timestamp":1773909446884}
+{"type":"screen-added","file":"/Users/illia/workspaces/me/.superpowers/brainstorm/19227-1773909333/approaches.html"}
+{"type":"screen-added","file":"/Users/illia/workspaces/me/.superpowers/brainstorm/19227-1773909333/neural-network-design.html"}
+{"type":"screen-added","file":"/Users/illia/workspaces/me/.superpowers/brainstorm/19227-1773909333/neural-network-acid.html"}
+{"type":"screen-added","file":"/Users/illia/workspaces/me/.superpowers/brainstorm/19227-1773909333/waiting.html"}
+{"type":"server-stopped","reason":"idle timeout"}

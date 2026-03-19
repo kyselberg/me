@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Illia Kyselov — Senior Frontend Engineer | Vue, Nuxt, React, Next.js</title>
+  <meta name="description" content="Illia Kyselov — Senior Frontend Engineer in Kyiv, Ukraine. 5+ years building scalable frontends with Vue, Nuxt, React & Next.js for products reaching millions of users. Open to opportunities.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Illia Kyselov">
+  <meta name="theme-color" content="#00ff88">
+  <link rel="canonical" href="https://illia.kyselov.me/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://illia.kyselov.me/">
+  <meta property="og:title" content="Illia Kyselov — Senior Frontend Engineer">
+  <meta property="og:description" content="5+ years building scalable frontends with Vue, Nuxt, React & Next.js for products reaching millions of users.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="Illia Kyselov">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Illia Kyselov — Senior Frontend Engineer">
+  <meta name="twitter:description" content="5+ years building scalable frontends with Vue, Nuxt, React & Next.js for products reaching millions of users.">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Illia Kyselov",
+    "url": "https://illia.kyselov.me",
+    "email": "mailto:doncerber@gmail.com",
+    "jobTitle": "Senior Frontend Engineer",
+    "sameAs": ["https://www.linkedin.com/in/illiakyselov"],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Universe Group"
+    },
+    "alumniOf": [
+      {
+        "@type": "CollegeOrUniversity",
+        "name": "National University of Kyiv-Mohyla Academy"
+      },
+      {
+        "@type": "CollegeOrUniversity",
+        "name": "Kyiv National Economic University"
+      }
+    ],
+    "knowsAbout": ["Vue.js", "Nuxt", "React", "Next.js", "TypeScript", "Tailwind CSS", "Three.js", "WebGL", "Node.js", "Laravel", "Frontend Architecture"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Kyiv",
+      "addressCountry": "UA"
+    }
+  }
+  </script>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='none' stroke='%2300ff88' stroke-width='6'/><circle cx='50' cy='50' r='8' fill='%2300ff88'/></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Boot Screen -->
+  <div id="boot-screen">
+    <div id="boot-terminal"></div>
+    <div id="boot-glitch-overlay"></div>
+  </div>
+
+  <!-- 3D Canvas -->
+  <canvas id="scene-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-tl" class="hud-corner">
+      <span>> SYS.ACTIVE</span>
+      <span>> NEURAL_CORTEX: ONLINE</span>
+      <span id="hud-nodes">> NODES: 6 | LINKS: 12</span>
+      <span id="hud-fps">> FPS: 60</span>
+    </div>
+    <div id="hud-tr" class="hud-corner">
+      <span>ILLIA://NEURAL.MAP</span>
+      <span>BUILD: 2026.03</span>
+      <span>STATUS: <em class="status-active">■</em> ACTIVE</span>
+    </div>
+    <div id="hud-bl" class="hud-corner">
+      <span>[DRAG] ROTATE</span>
+      <span>[SCROLL] ZOOM</span>
+      <span>[CLICK NODE] HACK</span>
+      <span>[ESC] CLOSE PANEL</span>
+    </div>
+    <div id="hud-br" class="hud-corner">
+      <span id="hud-discovered">NODES_DISCOVERED: 0/6</span>
+      <span>CONNECTIONS: 12</span>
+      <span id="hud-audio">🔊 AUDIO: ON</span>
+    </div>
+  </div>
+
+  <!-- Content Panel (shown when node is clicked) -->
+  <div id="content-panel" class="hidden">
+    <div id="panel-inner">
+      <div id="panel-header">
+        <span id="panel-title"></span>
+        <button id="panel-close">[ESC] CLOSE</button>
+      </div>
+      <div id="panel-subtitle"></div>
+      <div id="panel-body"></div>
+      <div class="panel-scanline"></div>
+    </div>
+  </div>
+
+  <!-- Semantic content for SEO & accessibility (visually hidden, fully crawlable) -->
+  <main class="sr-only">
+    <h1>Illia Kyselov — Senior Frontend Engineer</h1>
+    <p>I architect scalable frontends for products with millions of users. Based in Kyiv, Ukraine.</p>
+
+    <section>
+      <h2>About</h2>
+      <p>Senior Frontend Engineer currently at Universe Group (Genesis Tech ecosystem). 5+ years shipping Vue, Nuxt &amp; React at scale. Led frontend architecture for products reaching millions. Fullstack-capable when the project demands it. Master's in Computer Science at Kyiv-Mohyla Academy.</p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <h3>Universe Group — Frontend Engineer (Nov 2025 — Present)</h3>
+      <p>Building frontend for high-scale products across the Genesis Tech ecosystem serving millions of monthly active users.</p>
+
+      <h3>SubSub — Solo Frontend Engineer (Jul 2024 — Nov 2025)</h3>
+      <p>Owned the entire frontend organization. Built 3 Nuxt applications from zero to production. Migrated Laravel monolith to modular Vue SPA. Established testing culture with unit and E2E tests. Led hiring. Zero production incidents across entire tenure.</p>
+
+      <h3>Nimble CRM — Frontend Engineer (Dec 2020 — Jul 2024)</h3>
+      <p>Grew from junior to tech lead in 3.5 years. Led refactor that eliminated 2-5 recurring bugs per month. Designed testing strategy covering unit, component, and E2E tests. Drove React modernization initiative.</p>
+    </section>
+
+    <section>
+      <h2>Tech Stack</h2>
+      <ul>
+        <li>Frontend: Vue, Nuxt, React, Next.js, TypeScript, Tailwind CSS</li>
+        <li>Testing: Vitest, Jest, Cypress, Testing Library</li>
+        <li>Backend: Laravel, Node.js, Python, Go</li>
+        <li>Infrastructure: Cloudflare, Vite, Webpack</li>
+        <li>Creative: Three.js, WebGL, GLSL Shaders</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <ul>
+        <li>Master's in Computer Science — National University of Kyiv-Mohyla Academy (2025 — 2027, in progress)</li>
+        <li>Bachelor's in System Analysis — Kyiv National Economic University (2021 — 2025)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <address>
+        <p>Email: <a href="mailto:doncerber@gmail.com">doncerber@gmail.com</a></p>
+        <p>LinkedIn: <a href="https://www.linkedin.com/in/illiakyselov" rel="noopener">linkedin.com/in/illiakyselov</a></p>
+        <p>Location: Kyiv, Ukraine</p>
+      </address>
+      <p>Open to senior frontend and tech lead roles. Remote or Kyiv-based.</p>
+    </section>
+  </main>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
